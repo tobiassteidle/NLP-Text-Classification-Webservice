@@ -34,6 +34,17 @@ public class TextPreprocessorImpl implements TextPreprocessor {
 
     @Override
     public String cleanText(String text) {
+        /** Implementierung der Textbereinigung in Java
+         * Stopwords sind "oben" zu finden, die kann man evtl. über eine File reinladen die ich aus Python exportiere
+         * Die Werte von string.punctuation kann ich ebenfalls liefern
+         * Der Stemmer wird aktuell nicht verwendet, kann daher entfallen
+         * Für den WordNetLemmatizer muss eine Java Implementierung gefunden werden
+         *
+         *
+         */
+
+
+
 /*
 def clean_text(x, stemming=False, lemmatization=True):
     """
@@ -77,5 +88,33 @@ def clean_text(x, stemming=False, lemmatization=True):
 
 
         return null;
+    }
+
+    @Override
+    public int[] tokenize(String text) {
+        /**
+         * Der Tokenizer ist in Python wie folgt implementiert:
+         * MAX_FEATURES = 2000
+         * tokenizer = Tokenizer(num_words=MAX_FEATURES, split=' ')
+         * Den müsste es als equivalent evtl. in DeepLearning4j geben
+         */
+
+        return null;
+    }
+
+    @Override
+    public int[] padding(int [] tokenized_text) {
+        /**
+         * Padding ist einfach, Array bis zur länge PADDING mit 0 auffüllen
+         */
+        // PADDING ist in der Klasse als Konstante angelegt
+
+
+        return null;
+    }
+
+    @Override
+    public int[] pipeline(String text) {
+        return this.padding(this.tokenize(this.cleanText(text)));
     }
 }
