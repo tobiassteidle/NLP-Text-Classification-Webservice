@@ -30,6 +30,12 @@ public class TextPreprocessorImpl implements TextPreprocessor {
   'wouldn', "wouldn't"]
      */
 
+    /*
+        string.punctuation ist:
+        !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~
+
+     */
+
     private static final int PADDING = 20;
 
 
@@ -105,6 +111,8 @@ def clean_text(x, stemming=False, lemmatization=True):
 
          return tokenizer.texts_to_sequences(text)
          */
+
+        // Die tokenizer.json liegt unter resources/nlp/tokenizer.json
 
         return null;
     }
