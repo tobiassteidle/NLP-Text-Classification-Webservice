@@ -263,3 +263,5 @@ tags
 #
 # Manually added:
 *.iml
+.idea/
+
