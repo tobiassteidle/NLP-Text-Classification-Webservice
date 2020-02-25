@@ -1,6 +1,7 @@
 package de.codecave.demo.component.impl;
 
 import de.codecave.demo.component.TextPreprocessor;
+import org.deeplearning4j.nn.modelimport.keras.preprocessing.text.KerasTokenizer;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -92,11 +93,17 @@ def clean_text(x, stemming=False, lemmatization=True):
 
     @Override
     public int[] tokenize(String text) {
+
         /**
          * Der Tokenizer ist in Python wie folgt implementiert:
          * MAX_FEATURES = 2000
          * tokenizer = Tokenizer(num_words=MAX_FEATURES, split=' ')
-         * Den müsste es als equivalent evtl. in DeepLearning4j geben
+         * eq. in Java ist der KerasTokenizer
+         *
+         static KerasTokenizer	fromJson(java.lang.String jsonFileName)
+         Import Keras Tokenizer from JSON file created with `tokenizer.to_json()` in Python.
+
+         return tokenizer.texts_to_sequences(text)
          */
 
         return null;
