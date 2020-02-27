@@ -9,7 +9,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class TextPreprocessorTest {
 
-    private static final String TEST_SENTENCE = "Trump Paid More Than $100,000 To Cohen, Financial Disclosure Confirms";
+    private static final String TEST_SENTENCE_1 = "Will Ferrell And Molly Shannon Cover The Royal Wedding As \'Cord And Tish\'";
+    private static final String TEST_SENTENCE_2 = "7 Fashion Mistakes You\'ll Regret Forever";
+    private static final String TEST_SENTENCE_3 = "Best Travel Apps And Hacks For Your Vacation Workout";
 
     private static TextPreprocessor textPreprocessor;
 
@@ -20,21 +22,29 @@ public class TextPreprocessorTest {
 
     @Test
     public void cleanTextTest() {
-        assertThat(textPreprocessor.cleanText(TEST_SENTENCE), is("trump paid #num# cohen financial disclosure confirms"));
+        assertThat(textPreprocessor.cleanText(TEST_SENTENCE_1), is("ferrell molly shannon cover royal wedding cord tish"));
+        assertThat(textPreprocessor.cleanText(TEST_SENTENCE_2), is("#num# fashion mistake youll regret forever"));
+        assertThat(textPreprocessor.cleanText(TEST_SENTENCE_3), is("best travel apps hack vacation workout"));
     }
 
     @Test
     public void tokenizeTest() {
-        assertThat(textPreprocessor.tokenize(TEST_SENTENCE), is(new int[]{1, 2, 3, 4, 5, 6, 7}));
+        assertThat(textPreprocessor.tokenize(textPreprocessor.cleanText(TEST_SENTENCE_1)), is(new int[]{266, 754, 584}));
+        assertThat(textPreprocessor.tokenize(textPreprocessor.cleanText(TEST_SENTENCE_2)), is(new int[]{1, 64, 520, 739, 1692, 1508}));
+        assertThat(textPreprocessor.tokenize(textPreprocessor.cleanText(TEST_SENTENCE_3)), is(new int[]{12, 56, 1310, 1312, 307, 328}));
     }
 
     @Test
     public void paddingTest() {
-        assertThat(textPreprocessor.padding(textPreprocessor.tokenize(TEST_SENTENCE)), is(new int[]{1, 2, 3, 4, 5, 6, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}));
+        assertThat(textPreprocessor.padding(textPreprocessor.tokenize(textPreprocessor.cleanText(TEST_SENTENCE_1))), is(new int[]{266, 754, 584, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}));
+        assertThat(textPreprocessor.padding(textPreprocessor.tokenize(textPreprocessor.cleanText(TEST_SENTENCE_2))), is(new int[]{1, 64, 520, 739, 1692, 1508, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}));
+        assertThat(textPreprocessor.padding(textPreprocessor.tokenize(textPreprocessor.cleanText(TEST_SENTENCE_3))), is(new int[]{12, 56, 1310, 1312, 307, 328, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}));
     }
 
     @Test
     public void preprocessingPipelineTest() {
-        assertThat(textPreprocessor.pipeline(TEST_SENTENCE), is("Y"));
+        assertThat(textPreprocessor.pipeline(TEST_SENTENCE_1), is(new int[]{266, 754, 584, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}));
+        assertThat(textPreprocessor.pipeline(TEST_SENTENCE_2), is(new int[]{1, 64, 520, 739, 1692, 1508, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}));
+        assertThat(textPreprocessor.pipeline(TEST_SENTENCE_3), is(new int[]{12, 56, 1310, 1312, 307, 328, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}));
     }
 }
