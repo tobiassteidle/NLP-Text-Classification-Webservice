@@ -47,6 +47,9 @@ public class TextPreprocessorImpl implements TextPreprocessor {
          * Der Stemmer wird aktuell nicht verwendet, kann daher entfallen
          * Für den WordNetLemmatizer muss eine Java Implementierung gefunden werden
          *
+         * Das hier könnte als Lemmatizer funktionieren https://stanfordnlp.github.io/CoreNLP/simple.html
+         *
+         *
          *
          */
 
