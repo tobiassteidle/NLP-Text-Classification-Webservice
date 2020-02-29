@@ -1,8 +1,22 @@
 package de.codecave.demo.component.impl;
 
+import com.google.common.base.Preconditions;
 import de.codecave.demo.component.TextPreprocessor;
+import de.codecave.demo.util.Python3Compat;
+import org.apache.commons.lang3.Functions;
+import org.apache.commons.lang3.StringUtils;
 import org.deeplearning4j.nn.modelimport.keras.preprocessing.text.KerasTokenizer;
 import org.springframework.stereotype.Component;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.Locale;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Component
 public class TextPreprocessorImpl implements TextPreprocessor {
@@ -36,8 +50,25 @@ public class TextPreprocessorImpl implements TextPreprocessor {
 
      */
 
+
     private static final int PADDING = 20;
 
+    private static String removePunctuation(String text) {
+        final String punctuations = Pattern.quote("!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~");
+        return text.replaceAll("[" + punctuations + "]", "");
+    }
+
+    private Set<String> stopWords;
+
+    public TextPreprocessorImpl() {
+        this.stopWords = loadStopWordsFromTxtFile();
+    }
+
+    private String lematizer(String text) {
+        // TODO
+//        WordNetLemmatizer
+        return text;
+    }
 
     @Override
     public String cleanText(String text) {
@@ -53,7 +84,18 @@ public class TextPreprocessorImpl implements TextPreprocessor {
          *
          */
 
+        final Pattern REGEX_WHITESPACE = Pattern.compile("\\s");
 
+        return
+                REGEX_WHITESPACE.splitAsStream(text)
+                        .map(tok -> tok.toLowerCase(Locale.ENGLISH))
+                        .map(String::trim) // python3 string.strip The strip() method removes any whitespace from the beginning or the end:
+                        .map(tok -> removePunctuation(tok))
+                        .map(tok -> Python3Compat.isnumeric(tok) ? "#num" : tok)
+                        .filter(tok -> stopWords.contains(tok))
+                        .map(this::lematizer)
+                        .collect(Collectors.joining(" "));
+    }
 
 /*
 def clean_text(x, stemming=False, lemmatization=True):
@@ -97,9 +139,6 @@ def clean_text(x, stemming=False, lemmatization=True):
   */
 
 
-        return null;
-    }
-
     @Override
     public int[] tokenize(String text) {
 
@@ -135,4 +174,15 @@ def clean_text(x, stemming=False, lemmatization=True):
     public int[] pipeline(String text) {
         return this.padding(this.tokenize(this.cleanText(text)));
     }
+
+    private Set<String> loadStopWordsFromTxtFile() {
+        final InputStream is = TextPreprocessor.class.getResourceAsStream("/nlp/stopwords.txt");
+        Preconditions.checkNotNull("stopwords file not found");
+        return
+            new BufferedReader(new InputStreamReader(
+                    is)).lines()
+                .peek(word -> Preconditions.checkState(StringUtils.isNotBlank(word)))
+                .collect(Collectors.toSet());
+    }
+
 }
