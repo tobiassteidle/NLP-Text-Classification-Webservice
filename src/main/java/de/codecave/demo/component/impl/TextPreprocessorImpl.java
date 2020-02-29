@@ -79,15 +79,7 @@ public class TextPreprocessorImpl implements TextPreprocessor {
                         .map(tok -> removePunctuation(tok))
                         .map(tok -> Python3Compat.isnumeric(tok) ? "#num#" : tok)
                         .filter(tok -> !stopWords.contains(tok))
-                        .map(tok -> {
-                            try {
-                                return lemmatizerService.lemmatize(tok);
-                            } catch (IllegalStateException ise) {
-                                System.err.println("cannot lemmatize: " + tok);
-                                return tok;
-                            }
-                        }
-                        )
+                        .map(tok -> lemmatizerService.tryLemmatize(tok).orElse(tok))
                         .collect(Collectors.joining(" "));
     }
 

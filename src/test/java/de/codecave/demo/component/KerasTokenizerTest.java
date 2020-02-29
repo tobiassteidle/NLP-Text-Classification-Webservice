@@ -16,8 +16,6 @@ public class KerasTokenizerTest {
     void tokenizer() throws Exception {
 
         final int[] sequence = kerasService.textToSequence("ferrell molly shannon cover royal wedding cord tish");
-        Arrays.stream(sequence)
-                .forEach(val -> System.out.println("- " + val));
 
         assertThat(sequence, is(new int[]{266, 754, 584}));
     }
