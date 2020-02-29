@@ -17,6 +17,7 @@
     <properties>
         <java.version>1.8</java.version>
         <nd4j.version>1.0.0-beta6</nd4j.version>
+        <corenlp.version>3.9.2</corenlp.version>
     </properties>
 
     <dependencies>
@@ -79,6 +80,18 @@
             <groupId>org.deeplearning4j</groupId>
             <artifactId>deeplearning4j-zoo</artifactId>
             <version>${nd4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>edu.stanford.nlp</groupId>
+            <artifactId>stanford-corenlp</artifactId>
+            <version>${corenlp.version}</version>
+        </dependency>
+        <dependency>
+            <!-- 346MB -->
+            <groupId>edu.stanford.nlp</groupId>
+            <artifactId>stanford-corenlp</artifactId>
+            <version>${corenlp.version}</version>
+            <classifier>models</classifier>
         </dependency>
 
 

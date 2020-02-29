@@ -64,12 +64,6 @@ public class TextPreprocessorImpl implements TextPreprocessor {
         this.stopWords = loadStopWordsFromTxtFile();
     }
 
-    private String lematizer(String text) {
-        // TODO
-//        WordNetLemmatizer
-        return text;
-    }
-
     @Override
     public String cleanText(String text) {
         /** Implementierung der Textbereinigung in Java
@@ -91,9 +85,17 @@ public class TextPreprocessorImpl implements TextPreprocessor {
                         .map(tok -> tok.toLowerCase(Locale.ENGLISH))
                         .map(String::trim) // python3 string.strip The strip() method removes any whitespace from the beginning or the end:
                         .map(tok -> removePunctuation(tok))
-                        .map(tok -> Python3Compat.isnumeric(tok) ? "#num" : tok)
-                        .filter(tok -> stopWords.contains(tok))
-                        .map(this::lematizer)
+                        .map(tok -> Python3Compat.isnumeric(tok) ? "#num#" : tok)
+                        .filter(tok -> !stopWords.contains(tok))
+                        .map(tok -> {
+                            try {
+                                return LemmatizerCoreNLP.lemmatize(tok);
+                            } catch (IllegalStateException ise) {
+                                System.err.println("cannot lemmatize: " + tok);
+                                return tok;
+                            }
+                        }
+                        )
                         .collect(Collectors.joining(" "));
     }
 
