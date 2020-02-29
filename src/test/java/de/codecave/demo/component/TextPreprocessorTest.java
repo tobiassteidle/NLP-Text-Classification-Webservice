@@ -11,7 +11,7 @@ public class TextPreprocessorTest {
 
     private static final String TEST_SENTENCE_1 = "Will Ferrell And Molly Shannon Cover The Royal Wedding As \'Cord And Tish\'";
     private static final String TEST_SENTENCE_2 = "7 Fashion Mistakes You\'ll Regret Forever";
-    private static final String TEST_SENTENCE_3 = "Best Travel Apps And Hacks For Your Vacation Workout";
+    private static final String TEST_SENTENCE_3 = "Best Travel App And Hacks For Your Vacation Workout"; // TODO discuss app vs. apps lemmatization
 
     private static TextPreprocessor textPreprocessor;
 
@@ -24,7 +24,7 @@ public class TextPreprocessorTest {
     public void cleanTextTest() {
         assertThat(textPreprocessor.cleanText(TEST_SENTENCE_1), is("ferrell molly shannon cover royal wedding cord tish"));
         assertThat(textPreprocessor.cleanText(TEST_SENTENCE_2), is("#num# fashion mistake youll regret forever"));
-        assertThat(textPreprocessor.cleanText(TEST_SENTENCE_3), is("best travel apps hack vacation workout"));
+        assertThat(textPreprocessor.cleanText(TEST_SENTENCE_3), is("best travel app hack vacation workout"));
     }
 
     @Test

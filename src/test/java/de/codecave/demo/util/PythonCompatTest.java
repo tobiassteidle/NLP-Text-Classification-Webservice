@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static de.codecave.demo.util.Python3Compat.isnumeric;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class PythonCompatTest {
 
@@ -12,6 +13,7 @@ public class PythonCompatTest {
         // https://stackoverflow.com/questions/228532/difference-between-char-isdigit-and-char-isnumber-in-c-sharp
         // https://stackoverflow.com/questions/24384852/difference-between-unicode-isdigit-and-unicode-isnumeric
 
+        // TODO use assertThat
         Assertions.assertEquals(false, isnumeric(""));
         Assertions.assertEquals(true, isnumeric("1"));
         Assertions.assertEquals(true, isnumeric("99"));

@@ -3,6 +3,7 @@ package de.codecave.demo.component.impl;
 import com.google.common.base.Preconditions;
 import de.codecave.demo.component.TextPreprocessor;
 import de.codecave.demo.util.Python3Compat;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.Functions;
 import org.apache.commons.lang3.StringUtils;
 import org.deeplearning4j.nn.modelimport.keras.preprocessing.text.KerasTokenizer;
@@ -12,6 +13,7 @@ import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.Set;
 import java.util.function.Function;
@@ -21,37 +23,10 @@ import java.util.stream.Collectors;
 @Component
 public class TextPreprocessorImpl implements TextPreprocessor {
 
-    /*
-    STOPWORDS
-
-['i', 'me', 'my', 'myself', 'we', 'our', 'ours', 'ourselves', 'you', "you're",
-"you've", "you'll", "you'd", 'your', 'yours', 'yourself', 'yourselves', 'he',
-'him', 'his', 'himself', 'she', "she's", 'her', 'hers', 'herself',
-'it', "it's", 'its', 'itself', 'they', 'them', 'their', 'theirs', 'themselves',
-'what', 'which', 'who', 'whom', 'this', 'that', "that'll", 'these', 'those', 'am',
-'is', 'are', 'was', 'were', 'be', 'been', 'being', 'have', 'has', 'had', 'having',
-'do', 'does', 'did', 'doing', 'a', 'an', 'the', 'and', 'but', 'if', 'or', 'because',
-'as', 'until', 'while', 'of', 'at', 'by', 'for', 'with', 'about', 'against',
-'between', 'into', 'through', 'during', 'before', 'after', 'above', 'below', 'to',
-'from', 'up', 'down', 'in', 'out', 'on', 'off', 'over', 'under', 'again', 'further',
-'then', 'once', 'here', 'there', 'when', 'where', 'why', 'how', 'all', 'any', 'both',
-'each', 'few', 'more', 'most', 'other', 'some', 'such', 'no', 'nor', 'not', 'only', 'own',
-'same', 'so', 'than', 'too', 'very', 's', 't', 'can', 'will', 'just', 'don', "don't", 'should',
- "should've", 'now', 'd', 'll', 'm', 'o', 're', 've', 'y', 'ain', 'aren', "aren't", 'couldn',
- "couldn't", 'didn', "didn't", 'doesn', "doesn't", 'hadn', "hadn't", 'hasn', "hasn't", 'haven',
- "haven't", 'isn', "isn't", 'ma', 'mightn', "mightn't", 'mustn', "mustn't", 'needn', "needn't",
- 'shan', "shan't", 'shouldn', "shouldn't", 'wasn', "wasn't", 'weren', "weren't", 'won', "won't",
-  'wouldn', "wouldn't"]
-     */
-
-    /*
-        string.punctuation ist:
-        !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~
-
-     */
-
-
     private static final int PADDING = 20;
+
+    // TODO springify
+    private KerasService kerasService = new KerasService();
 
     private static String removePunctuation(String text) {
         final String punctuations = Pattern.quote("!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~");
@@ -158,7 +133,8 @@ def clean_text(x, stemming=False, lemmatization=True):
 
         // Die tokenizer.json liegt unter resources/nlp/tokenizer.json
 
-        return null;
+
+        return kerasService.textToSequence(text);
     }
 
     @Override
@@ -168,8 +144,9 @@ def clean_text(x, stemming=False, lemmatization=True):
          */
         // PADDING ist in der Klasse als Konstante angelegt
 
+        Preconditions.checkState(tokenized_text.length <= PADDING);
 
-        return null;
+        return Arrays.copyOf(tokenized_text, PADDING);
     }
 
     @Override
