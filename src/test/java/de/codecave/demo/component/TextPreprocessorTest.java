@@ -3,10 +3,16 @@ package de.codecave.demo.component;
 import de.codecave.demo.component.impl.TextPreprocessorImpl;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+@SpringBootTest
 public class TextPreprocessorTest {
 
     private static final String TEST_SENTENCE_1 = "Will Ferrell And Molly Shannon Cover The Royal Wedding As \'Cord And Tish\'";
@@ -14,12 +20,9 @@ public class TextPreprocessorTest {
     // TODO discuss App vs. Apps lemmatization
     private static final String TEST_SENTENCE_3 = "Best Travel App And Hacks For Your Vacation Workout";
 
-    private static TextPreprocessor textPreprocessor;
+    @Autowired
+    private TextPreprocessor textPreprocessor;
 
-    @BeforeAll
-    static void initialize() {
-        textPreprocessor = new TextPreprocessorImpl();
-    }
 
     @Test
     public void cleanTextTest() {

@@ -5,7 +5,7 @@ public interface TextPreprocessor {
 
     int [] tokenize(String text);
 
-    int [] padding(int [] tokenized_text);
+    int [] padding(int [] tokenizedText);
 
     int [] pipeline(String text);
 }

@@ -1,11 +1,16 @@
 package de.codecave.demo.component;
 
-import de.codecave.demo.component.impl.LemmatizerCoreNLP;
+import de.codecave.demo.component.impl.LemmatizerCoreNLPServiceImpl;
 import edu.stanford.nlp.simple.Sentence;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+
 public class LemmatizerTest {
+
+    private LemmatizerService lemmatizerService = new LemmatizerCoreNLPServiceImpl();
 
     @Test
     void lemm_mistakes() {
@@ -13,24 +18,24 @@ public class LemmatizerTest {
         // ‘Caring’ -> Lemmatization -> ‘Care’
         final Sentence sentence = new Sentence("7 Fashion Mistakes You\'ll Regret Forever");
 
-        Assertions.assertEquals("mistake", sentence.lemma(2));
+        assertThat(sentence.lemma(2), is("mistake"));
 
     }
 
     @Test
     void use_corenlp() {
-        Assertions.assertEquals("mistake", LemmatizerCoreNLP.lemmatize("Mistakes"));
+        assertThat(lemmatizerService.lemmatize("Mistakes"), is("mistake"));
     }
 
     @Test
     void cannot_lemmatize() {
-        Assertions.assertEquals("mistake", LemmatizerCoreNLP.lemmatize("#num#"));
+        assertThat(lemmatizerService.lemmatize("#num#"), is("mistake"));
     }
 
     @Test
     void fail_on_multiple_tokens() {
         Assertions.assertThrows(IllegalStateException.class,
-                () -> LemmatizerCoreNLP.lemmatize("Fashion Mistakes"));
+                () -> lemmatizerService.lemmatize("Fashion Mistakes"));
     }
 
 }

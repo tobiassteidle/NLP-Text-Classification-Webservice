@@ -1,12 +1,13 @@
 package de.codecave.demo.component.impl;
 
 import com.google.common.base.Preconditions;
-import de.codecave.demo.component.TextPreprocessor;
+import de.codecave.demo.component.*;
 import de.codecave.demo.util.Python3Compat;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.Functions;
 import org.apache.commons.lang3.StringUtils;
 import org.deeplearning4j.nn.modelimport.keras.preprocessing.text.KerasTokenizer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedInputStream;
@@ -23,10 +24,14 @@ import java.util.stream.Collectors;
 @Component
 public class TextPreprocessorImpl implements TextPreprocessor {
 
-    private static final int PADDING = 20;
+    @Autowired
+    private LemmatizerService lemmatizerService;
 
-    // TODO springify
-    private KerasService kerasService = new KerasService();
+    @Autowired
+    private TokenizerService tokenizerService;
+
+    @Autowired
+    private PaddingService paddingService;
 
     private static String removePunctuation(String text) {
         final String punctuations = Pattern.quote("!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~");
@@ -37,6 +42,18 @@ public class TextPreprocessorImpl implements TextPreprocessor {
 
     public TextPreprocessorImpl() {
         this.stopWords = loadStopWordsFromTxtFile();
+    }
+
+    public void setLemmatizerService(LemmatizerService lemmatizerService) {
+        this.lemmatizerService = lemmatizerService;
+    }
+
+    public void setTokenizerService(TokenizerService tokenizerService) {
+        this.tokenizerService = tokenizerService;
+    }
+
+    public void setPaddingService(PaddingService paddingService) {
+        this.paddingService = paddingService;
     }
 
     @Override
@@ -64,7 +81,7 @@ public class TextPreprocessorImpl implements TextPreprocessor {
                         .filter(tok -> !stopWords.contains(tok))
                         .map(tok -> {
                             try {
-                                return LemmatizerCoreNLP.lemmatize(tok);
+                                return lemmatizerService.lemmatize(tok);
                             } catch (IllegalStateException ise) {
                                 System.err.println("cannot lemmatize: " + tok);
                                 return tok;
@@ -115,38 +132,14 @@ def clean_text(x, stemming=False, lemmatization=True):
     return cleaned
   */
 
-
     @Override
     public int[] tokenize(String text) {
-
-        /**
-         * Der Tokenizer ist in Python wie folgt implementiert:
-         * MAX_FEATURES = 2000
-         * tokenizer = Tokenizer(num_words=MAX_FEATURES, split=' ')
-         * eq. in Java ist der KerasTokenizer
-         *
-         static KerasTokenizer	fromJson(java.lang.String jsonFileName)
-         Import Keras Tokenizer from JSON file created with `tokenizer.to_json()` in Python.
-
-         return tokenizer.texts_to_sequences(text)
-         */
-
-        // Die tokenizer.json liegt unter resources/nlp/tokenizer.json
-
-
-        return kerasService.textToSequence(text);
+        return tokenizerService.textToSequence(text);
     }
 
     @Override
-    public int[] padding(int [] tokenized_text) {
-        /**
-         * Padding ist einfach, Array bis zur länge PADDING mit 0 auffüllen
-         */
-        // PADDING ist in der Klasse als Konstante angelegt
-
-        Preconditions.checkState(tokenized_text.length <= PADDING);
-
-        return Arrays.copyOf(tokenized_text, PADDING);
+    public int[] padding(int[] tokenizedText) {
+        return paddingService.padding(tokenizedText);
     }
 
     @Override
