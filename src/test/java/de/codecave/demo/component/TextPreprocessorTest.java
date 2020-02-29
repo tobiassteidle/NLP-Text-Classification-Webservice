@@ -17,8 +17,7 @@ public class TextPreprocessorTest {
 
     private static final String TEST_SENTENCE_1 = "Will Ferrell And Molly Shannon Cover The Royal Wedding As \'Cord And Tish\'";
     private static final String TEST_SENTENCE_2 = "7 Fashion Mistakes You\'ll Regret Forever";
-    // TODO discuss App vs. Apps lemmatization
-    private static final String TEST_SENTENCE_3 = "Best Travel App And Hacks For Your Vacation Workout";
+    private static final String TEST_SENTENCE_3 = "Best Travel Apps And Hacks For Your Vacation Workout";
 
     @Autowired
     private TextPreprocessor textPreprocessor;
