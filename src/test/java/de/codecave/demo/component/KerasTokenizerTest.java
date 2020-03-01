@@ -19,4 +19,5 @@ public class KerasTokenizerTest {
 
         assertThat(sequence, is(new int[]{266, 754, 584}));
     }
+
 }
