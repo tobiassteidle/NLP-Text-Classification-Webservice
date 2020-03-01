@@ -76,11 +76,7 @@
             <classifier>macosx-x86_64-avx2</classifier>
 <!--            <classifier>windows-x86_64-avx2</classifier>-->
         </dependency>
-        <dependency>
-            <groupId>org.deeplearning4j</groupId>
-            <artifactId>deeplearning4j-zoo</artifactId>
-            <version>${nd4j.version}</version>
-        </dependency>
+
         <dependency>
             <groupId>edu.stanford.nlp</groupId>
             <artifactId>stanford-corenlp</artifactId>
