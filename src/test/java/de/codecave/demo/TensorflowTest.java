@@ -1,5 +1,7 @@
 package de.codecave.demo;
 
+import javafx.scene.paint.Stop;
+import org.apache.commons.lang3.time.StopWatch;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import org.nd4j.linalg.factory.Nd4j;
@@ -12,6 +14,7 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class TensorflowTest {
 
@@ -19,7 +22,7 @@ public class TensorflowTest {
     final private List<String> categories = Lists.newArrayList(            "BLACK VOICES", "COMEDY", "ENTERTAINMENT", "MEDIA", "POLITICS", "QUEER VOICES", "SPORTS", "WEIRD NEWS", "WOMEN", "WORLD NEWS");
 
     @Test
-    void name() {
+    void singleRun() {
 
         final SavedModelBundle modelBundle = SavedModelBundle.load(
                 "/Users/stefanostermayr/Documents/MeetupJUG2020DL4J/model/tensorflow2/tensorflow", "serve");
@@ -77,6 +80,47 @@ public class TensorflowTest {
             System.out.println("max " + categories.get(max));
 
         }
+
+        modelBundle.close();
+    }
+
+    @Test
+    void massSessions() {
+
+        final SavedModelBundle modelBundle = SavedModelBundle.load(
+                "/Users/stefanostermayr/Documents/MeetupJUG2020DL4J/model/tensorflow2/tensorflow", "serve");
+
+        final StopWatch stopWatch = StopWatch.createStarted();
+
+
+        // note: this is NOT a session factory method - session is part of model
+        try (Session session = modelBundle.session()) {
+
+            for (int i=0; i<1_000; i++) {
+
+                                int batchSize = 1;
+                int maxFeaturesAmount = 20;
+                int nCategories = 10;
+
+                final int[] inputTravelApps = {133, 937, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+                // input must be 4-dimensional[20,1,200]
+                final Tensor<Integer> padTensor = Tensor.create(new long[]{1,maxFeaturesAmount}, matrixInt(1, maxFeaturesAmount, inputTravelApps));
+
+                // runner is a factory method
+                session.runner()
+                    .feed("serving_default_tobias", padTensor)
+//                    .feed("x_aux", auxTensor)
+                    .fetch("StatefulPartitionedCall")
+                    .run()
+                    .get(0);
+
+            }
+
+        }
+
+
+        System.out.println("elapsed " + stopWatch.getTime(TimeUnit.MILLISECONDS));
 
         modelBundle.close();
     }
