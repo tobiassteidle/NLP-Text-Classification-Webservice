@@ -61,6 +61,8 @@ public class TensorflowPredictionServiceImpl implements PredictionService {
 
         final int[] inputTokens = textPreprocessor.pipeline(newsLine);
 
+        LOGGER.debug("Tokens after preprocessing: {}", Arrays.toString(inputTokens));
+
         final Tensor<Integer> inputTensor = Tensor.create(new long[]{batchSize, maxFeaturesAmount}, matrixInt(batchSize, maxFeaturesAmount, inputTokens));
 
         final Tensor<?> resultTensor =
