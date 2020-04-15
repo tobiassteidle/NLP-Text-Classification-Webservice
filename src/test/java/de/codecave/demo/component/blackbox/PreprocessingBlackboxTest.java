@@ -39,8 +39,11 @@ public class PreprocessingBlackboxTest {
             System.out.println("input\t" + sentence.getSentence());
             System.out.println("tok\t" + sentence.getTokenized());
 
+            final String cleaned = textPreprocessor.cleanText(sentence.getSentence());
+            System.out.println("clean\t" + cleaned);
+
             final List<Integer> actual = Ints.asList(textPreprocessor.tokenize(
-                    sentence.getSentence()));
+                    cleaned));
             final List<Integer> expected = sentence.getTokenized();
             if (actual.equals(expected)) {
                 System.out.println("-> OK");
@@ -56,7 +59,7 @@ public class PreprocessingBlackboxTest {
         assertThat(error, is(0));
     }
 
-    ModelFile loadModelFile() {
+    private ModelFile loadModelFile() {
 
         try (InputStream is = PreprocessingBlackboxTest.class
                 .getResourceAsStream("/modeldata.json")) {
