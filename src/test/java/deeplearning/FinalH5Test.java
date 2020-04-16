@@ -1,18 +1,14 @@
 package deeplearning;
 
-import javafx.scene.paint.Stop;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.time.StopWatch;
 import org.assertj.core.util.Lists;
 import org.deeplearning4j.nn.graph.ComputationGraph;
 import org.deeplearning4j.nn.modelimport.keras.KerasModel;
-import org.deeplearning4j.nn.modelimport.keras.KerasModelImport;
 import org.deeplearning4j.nn.modelimport.keras.utils.KerasModelBuilder;
 import org.junit.jupiter.api.Test;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -54,7 +50,7 @@ public class FinalH5Test {
         // style&beauty
         final float[] inputFashionMistakes = {1, 64, 520, 739, 1692, 1508, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         final float[] inputTravelApps = {12, 56, 1310, 1312, 307, 328, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-        final float[][] blabla2 = new float[][] {inputWedding,inputFashionMistakes,inputTravelApps};
+        final float[][] blabla2 = new float[][]{inputWedding, inputFashionMistakes, inputTravelApps};
 
         final INDArray input = Nd4j.create(blabla2);
 
@@ -63,7 +59,7 @@ public class FinalH5Test {
         final INDArray output = network.outputSingle(input);
         System.out.println("elapsed " + stopWatch.getTime(TimeUnit.MILLISECONDS));
 
-        for(int i=0;i<blabla2.length;i++) {
+        for (int i = 0; i < blabla2.length; i++) {
             final INDArray result = output.getRow(i);
             System.out.println("output " + result);
 
@@ -71,9 +67,6 @@ public class FinalH5Test {
             System.out.println("max# " + max);
             System.out.println("max " + categories.get(max));
         }
-
-
-
 
 
 //['POLITICS', 'WELLNESS', 'ENTERTAINMENT', 'TRAVEL', 'STYLE & BEAUTY', 'PARENTING', 'HEALTHY LIVING', 'QUEER VOICES', 'FOOD & DRINK', 'BUSINESS']

@@ -74,12 +74,12 @@ public class TextPreprocessorImpl implements TextPreprocessor {
 
         return
                 REGEX_WHITESPACE.splitAsStream(text)
+                        .map(tok -> lemmatizerService.tryLemmatize(tok).orElse(tok))
                         .map(tok -> tok.toLowerCase(Locale.ENGLISH))
                         .map(String::trim) // python3 string.strip The strip() method removes any whitespace from the beginning or the end:
                         .map(tok -> removePunctuation(tok))
-                        .map(tok -> Python3Compat.isnumeric(tok) ? "#num#" : tok)
+                        .map(tok -> Python3Compat.isnumeric(tok) ? "<num>" : tok)
                         .filter(tok -> !stopWords.contains(tok))
-                        .map(tok -> lemmatizerService.tryLemmatize(tok).orElse(tok))
                         .collect(Collectors.joining(" "));
     }
 

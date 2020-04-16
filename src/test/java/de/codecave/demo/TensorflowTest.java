@@ -1,6 +1,5 @@
 package de.codecave.demo;
 
-import javafx.scene.paint.Stop;
 import org.apache.commons.lang3.time.StopWatch;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
@@ -8,7 +7,6 @@ import org.nd4j.linalg.factory.Nd4j;
 import org.tensorflow.SavedModelBundle;
 import org.tensorflow.Session;
 import org.tensorflow.Tensor;
-import org.tensorflow.framework.SavedModel;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -19,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 public class TensorflowTest {
 
     final private List<String> categoriesZZZ = Lists.newArrayList("POLITICS", "WELLNESS", "ENTERTAINMENT", "TRAVEL", "STYLE & BEAUTY", "PARENTING", "HEALTHY LIVING", "QUEER VOICES", "FOOD & DRINK", "BUSINESS");
-    final private List<String> categories = Lists.newArrayList(            "BLACK VOICES", "COMEDY", "ENTERTAINMENT", "MEDIA", "POLITICS", "QUEER VOICES", "SPORTS", "WEIRD NEWS", "WOMEN", "WORLD NEWS");
+    final private List<String> categories = Lists.newArrayList("BLACK VOICES", "COMEDY", "ENTERTAINMENT", "MEDIA", "POLITICS", "QUEER VOICES", "SPORTS", "WEIRD NEWS", "WOMEN", "WORLD NEWS");
 
     @Test
     void singleRun() {
@@ -45,15 +43,15 @@ public class TensorflowTest {
             final int[] inputFashionMistakes = {1, 64, 520, 739, 1692, 1508, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
             final int[] inputTravelApps = {133, 937, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
-            final Tensor<Integer> padTensor = Tensor.create(new long[]{1,maxFeaturesAmount}, matrixInt(1, maxFeaturesAmount, inputTravelApps));
+            final Tensor<Integer> padTensor = Tensor.create(new long[]{1, maxFeaturesAmount}, matrixInt(1, maxFeaturesAmount, inputTravelApps));
 //            final Tensor<Float> auxTensor = Tensor.create(new long[]{batchSize, maxFeaturesAmount}, matrix(batchSize, maxFeaturesAmount));
 
             final Tensor<?> resultTensor =
                     runner.feed("serving_default_tobias", padTensor)
 //                    .feed("x_aux", auxTensor)
-                    .fetch("StatefulPartitionedCall")
-                    .run()
-                    .get(0);
+                            .fetch("StatefulPartitionedCall")
+                            .run()
+                            .get(0);
 
 
 //            saved_model_cli show --dir .
@@ -96,24 +94,24 @@ public class TensorflowTest {
         // note: this is NOT a session factory method - session is part of model
         try (Session session = modelBundle.session()) {
 
-            for (int i=0; i<1_000; i++) {
+            for (int i = 0; i < 1_000; i++) {
 
-                                int batchSize = 1;
+                int batchSize = 1;
                 int maxFeaturesAmount = 20;
                 int nCategories = 10;
 
                 final int[] inputTravelApps = {133, 937, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
                 // input must be 4-dimensional[20,1,200]
-                final Tensor<Integer> padTensor = Tensor.create(new long[]{1,maxFeaturesAmount}, matrixInt(1, maxFeaturesAmount, inputTravelApps));
+                final Tensor<Integer> padTensor = Tensor.create(new long[]{1, maxFeaturesAmount}, matrixInt(1, maxFeaturesAmount, inputTravelApps));
 
                 // runner is a factory method
                 session.runner()
-                    .feed("serving_default_tobias", padTensor)
+                        .feed("serving_default_tobias", padTensor)
 //                    .feed("x_aux", auxTensor)
-                    .fetch("StatefulPartitionedCall")
-                    .run()
-                    .get(0);
+                        .fetch("StatefulPartitionedCall")
+                        .run()
+                        .get(0);
 
             }
 
@@ -127,16 +125,16 @@ public class TensorflowTest {
 
     private FloatBuffer matrix(int batchSize, int maxFeaturesAmount) {
         final FloatBuffer matrixData = FloatBuffer.allocate(batchSize * maxFeaturesAmount);
-        for (int i=0;i <batchSize * maxFeaturesAmount; i++) {
-                matrixData.put(0.01f);
-            }
+        for (int i = 0; i < batchSize * maxFeaturesAmount; i++) {
+            matrixData.put(0.01f);
+        }
         matrixData.rewind();
         return matrixData;
     }
 
     private IntBuffer matrixInt(int batchSize, int maxFeaturesAmount, int[] data) {
         final IntBuffer matrixData = IntBuffer.allocate(batchSize * maxFeaturesAmount);
-        for (int i=0;i <batchSize * maxFeaturesAmount; i++) {
+        for (int i = 0; i < batchSize * maxFeaturesAmount; i++) {
             matrixData.put(data[i]);
         }
         matrixData.rewind();

@@ -62,7 +62,7 @@ public class PreprocessingBlackboxTest {
     private ModelFile loadModelFile() {
 
         try (InputStream is = PreprocessingBlackboxTest.class
-                .getResourceAsStream("/modeldata.json")) {
+                .getResourceAsStream("/nlp/preprocessing_test.json")) {
             Preconditions.checkNotNull(is);
 
                 return objectMapper.readValue(is, ModelFile.class);
