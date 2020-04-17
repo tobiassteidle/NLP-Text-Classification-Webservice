@@ -1,18 +1,22 @@
 package de.codecave.demo.component;
 
-import de.codecave.demo.component.impl.TextPreprocessorImpl;
-import org.junit.jupiter.api.BeforeAll;
+import de.codecave.demo.component.impl.*;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-@SpringBootTest
+@ContextConfiguration(classes = {
+        TextPreprocessorImpl.class,
+        KerasTokenizerImpl.class,
+        SimplePaddingServiceImpl.class,
+        StemmerServiceImpl.class,
+        TextCleanerServiceImpl.class})
+@ExtendWith(SpringExtension.class)
 public class TextPreprocessorTest {
 
     private static final String TEST_SENTENCE_1 = "Will Ferrell And Molly Shannon Cover The Royal Wedding As \'Cord And Tish\'";
@@ -22,32 +26,38 @@ public class TextPreprocessorTest {
     @Autowired
     private TextPreprocessor textPreprocessor;
 
+    @Autowired
+    private TokenizerService tokenizerService;
+
+    @Autowired
+    private PaddingService paddingService;
+
+    @Autowired
+    private TextCleanerService textCleanerService;
 
     @Test
     public void cleanTextTest() {
-        assertThat(textPreprocessor.cleanText(TEST_SENTENCE_1), is("ferrell molly shannon cover royal wedding cord tish"));
-        assertThat(textPreprocessor.cleanText(TEST_SENTENCE_2), is("#num# fashion mistake youll regret forever"));
-        assertThat(textPreprocessor.cleanText(TEST_SENTENCE_3), is("best travel app hack vacation workout"));
+        assertThat(textCleanerService.cleanText(TEST_SENTENCE_1), is("ferrel molli shannon cover royal wed cord tish"));
+        assertThat(textCleanerService.cleanText(TEST_SENTENCE_2), is("<num> fashion mistak youll regret forev"));
+        assertThat(textCleanerService.cleanText(TEST_SENTENCE_3), is("best travel app hack vacat workout"));
     }
 
     @Test
     public void tokenizeTest() {
-        assertThat(textPreprocessor.tokenize("ferrell molly shannon cover royal wedding cord tish"), is(new int[]{266, 754, 584}));
-        assertThat(textPreprocessor.tokenize("#num# fashion mistake youll regret forever"), is(new int[]{1, 64, 520, 739, 1692, 1508}));
-        assertThat(textPreprocessor.tokenize("best travel app hack vacation workout"), is(new int[]{12, 56, 1310, 1312, 307, 328}));
+        assertThat(tokenizerService.textToSequence(textCleanerService.cleanText(TEST_SENTENCE_1)), is(new int[]{248, 58, 47}));
+        assertThat(tokenizerService.textToSequence(textCleanerService.cleanText(TEST_SENTENCE_2)), is(new int[]{2, 613}));
+        assertThat(tokenizerService.textToSequence(textCleanerService.cleanText(TEST_SENTENCE_3)), is(new int[]{324, 1129}));
     }
 
     @Test
     public void paddingTest() {
-        assertThat(textPreprocessor.padding(new int[]{266, 754, 584}), is(new int[]{266, 754, 584, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}));
-        assertThat(textPreprocessor.padding(new int[]{1, 64, 520, 739, 1692, 1508}), is(new int[]{1, 64, 520, 739, 1692, 1508, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}));
-        assertThat(textPreprocessor.padding(new int[]{12, 56, 1310, 1312, 307, 328}), is(new int[]{12, 56, 1310, 1312, 307, 328, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}));
+        assertThat(paddingService.padding(new int[]{11, 22, 33}), is(new int[]{11, 22, 33, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}));
     }
 
     @Test
     public void preprocessingPipelineTest() {
-        assertThat(textPreprocessor.pipeline(TEST_SENTENCE_1), is(new int[]{266, 754, 584, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}));
-        assertThat(textPreprocessor.pipeline(TEST_SENTENCE_2), is(new int[]{1, 64, 520, 739, 1692, 1508, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}));
-        assertThat(textPreprocessor.pipeline(TEST_SENTENCE_3), is(new int[]{12, 56, 1310, 1312, 307, 328, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}));
+        assertThat(textPreprocessor.pipeline(TEST_SENTENCE_1), is(new int[]{248, 58, 47, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}));
+        assertThat(textPreprocessor.pipeline(TEST_SENTENCE_2), is(new int[]{2, 613, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}));
+        assertThat(textPreprocessor.pipeline(TEST_SENTENCE_3), is(new int[]{324, 1129, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}));
     }
 }

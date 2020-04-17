@@ -13,11 +13,6 @@ public class SimplePaddingServiceImpl implements PaddingService {
 
     @Override
     public int[] padding(int[] tokenizedText) {
-        /**
-         * Padding ist einfach, Array bis zur länge PADDING mit 0 auffüllen
-         */
-        // PADDING ist in der Klasse als Konstante angelegt
-
         Preconditions.checkState(tokenizedText.length <= PADDING);
 
         return Arrays.copyOf(tokenizedText, PADDING);

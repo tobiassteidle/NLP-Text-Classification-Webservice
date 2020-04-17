@@ -3,12 +3,12 @@ package de.codecave.demo.util;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
-public final class Python3Compat {
+public final class Python3CompatUtil {
 
     private static final Pattern REGEX_SPLIT = Pattern.compile("\\s");
     private static final Pattern REGEX_STRING_ISNUMERIC = Pattern.compile("[\\p{Nd}\\p{No}]+");
 
-    private Python3Compat() {
+    private Python3CompatUtil() {
     }
 
     // The isnumeric() method returns True if all the characters are numeric (0-9), otherwise False.

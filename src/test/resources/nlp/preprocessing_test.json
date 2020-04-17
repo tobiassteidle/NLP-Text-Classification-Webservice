@@ -1,16 +1,4 @@
 {
-    "classes": [
-        "BLACK VOICES",
-        "COMEDY",
-        "CRIME",
-        "ENTERTAINMENT",
-        "MEDIA",
-        "POLITICS",
-        "QUEER VOICES",
-        "WEIRD NEWS",
-        "WOMEN",
-        "WORLD NEWS"
-    ],
     "test_sentences": [
         {
             "cleaned": [

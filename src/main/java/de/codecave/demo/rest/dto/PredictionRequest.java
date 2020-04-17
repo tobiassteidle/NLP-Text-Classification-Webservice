@@ -1,6 +1,5 @@
 package de.codecave.demo.rest.dto;
 
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 public class PredictionRequest {

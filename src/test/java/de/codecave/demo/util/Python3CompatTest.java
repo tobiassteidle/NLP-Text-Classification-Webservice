@@ -1,12 +1,10 @@
 package de.codecave.demo.util;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static de.codecave.demo.util.Python3Compat.isnumeric;
+import static de.codecave.demo.util.Python3CompatUtil.isnumeric;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.CoreMatchers.*;
 
 public class Python3CompatTest {
 

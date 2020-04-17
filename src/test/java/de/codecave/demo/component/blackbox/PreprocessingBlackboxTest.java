@@ -1,16 +1,21 @@
 package de.codecave.demo.component.blackbox;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.base.Preconditions;
 import com.google.common.primitives.Ints;
+import de.codecave.demo.component.TextCleanerService;
 import de.codecave.demo.component.TextPreprocessor;
+import de.codecave.demo.component.impl.*;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -18,7 +23,13 @@ import static org.hamcrest.MatcherAssert.assertThat;
 /**
  * test against input-output data from python
  */
-@SpringBootTest
+@ContextConfiguration(classes = {
+        TextPreprocessorImpl.class,
+        KerasTokenizerImpl.class,
+        SimplePaddingServiceImpl.class,
+        StemmerServiceImpl.class,
+        TextCleanerServiceImpl.class})
+@ExtendWith(SpringExtension.class)
 public class PreprocessingBlackboxTest {
 
     private ObjectMapper objectMapper = new ObjectMapper();
@@ -26,25 +37,29 @@ public class PreprocessingBlackboxTest {
     @Autowired
     private TextPreprocessor textPreprocessor;
 
+    @Autowired
+    private TextCleanerService textCleanerService;
+
+    @Value("classpath:/nlp/preprocessing_test.json")
+    private Resource blackboxTestFile;
 
     @Test
     void testTokenizer() {
         int success = 0;
         int error = 0;
 
-        final ModelFile modelFile = loadModelFile();
+        final PreprocessingBlackboxData modelFile = loadModelFile();
 
-        for(ModelFile.Sentence sentence : modelFile.getTestSentences()) {
+        for (PreprocessingBlackboxData.Sentence sentence : modelFile.getTestSentences()) {
 
             System.out.println("input\t" + sentence.getSentence());
             System.out.println("tok\t" + sentence.getTokenized());
 
-            final String cleaned = textPreprocessor.cleanText(sentence.getSentence());
+            final String cleaned = textCleanerService.cleanText(sentence.getSentence());
             System.out.println("clean\t" + cleaned);
 
-            final List<Integer> actual = Ints.asList(textPreprocessor.tokenize(
-                    cleaned));
-            final List<Integer> expected = sentence.getTokenized();
+            final List<Integer> actual = Ints.asList(textPreprocessor.pipeline(sentence.getSentence()));
+            final List<Integer> expected = sentence.getPadded().stream().map(Float::intValue).collect(Collectors.toList());
             if (actual.equals(expected)) {
                 System.out.println("-> OK");
                 success++;
@@ -59,17 +74,16 @@ public class PreprocessingBlackboxTest {
         assertThat(error, is(0));
     }
 
-    private ModelFile loadModelFile() {
+    private PreprocessingBlackboxData loadModelFile() {
 
-        try (InputStream is = PreprocessingBlackboxTest.class
-                .getResourceAsStream("/nlp/preprocessing_test.json")) {
-            Preconditions.checkNotNull(is);
+        try {
 
-                return objectMapper.readValue(is, ModelFile.class);
+            return objectMapper.readValue(blackboxTestFile.getInputStream(), PreprocessingBlackboxData.class);
 
         } catch (IOException e) {
-            throw new  IllegalStateException(e);
+            throw new IllegalStateException(e);
         }
 
     }
+
 }

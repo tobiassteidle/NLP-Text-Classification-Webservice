@@ -11,13 +11,13 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.2.2.RELEASE</version>
+        <version>2.2.6.RELEASE</version>
     </parent>
 
     <properties>
         <java.version>1.8</java.version>
-        <nd4j.version>1.0.0-beta6</nd4j.version>
-        <corenlp.version>3.9.2</corenlp.version>
+        <deeplearning4j.version>1.0.0-beta6</deeplearning4j.version>
+        <lucene.version>8.5.1</lucene.version>
     </properties>
 
     <dependencies>
@@ -37,6 +37,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-logging</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
@@ -44,77 +45,47 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>27.0.1-jre</version>
+            <version>29.0-jre</version>
         </dependency>
         <dependency>
             <groupId>one.util</groupId>
             <artifactId>streamex</artifactId>
-            <version>0.6.8</version>
-        </dependency>
-        <dependency>
-            <groupId>javax.validation</groupId>
-            <artifactId>validation-api</artifactId>
+            <version>0.7.2</version>
         </dependency>
 
-
-        <!-- deeplearning -->
         <dependency>
             <groupId>org.deeplearning4j</groupId>
             <artifactId>deeplearning4j-nn</artifactId>
-            <version>${nd4j.version}</version>
+            <version>${deeplearning4j.version}</version>
         </dependency>
         <dependency>
             <groupId>org.deeplearning4j</groupId>
             <artifactId>deeplearning4j-modelimport</artifactId>
-            <version>${nd4j.version}</version>
+            <version>${deeplearning4j.version}</version>
         </dependency>
         <dependency>
             <groupId>org.nd4j</groupId>
             <artifactId>nd4j-native-platform</artifactId>
-            <version>${nd4j.version}</version>
+            <version>${deeplearning4j.version}</version>
         </dependency>
         <dependency>
             <groupId>org.nd4j</groupId>
             <artifactId>nd4j-native</artifactId>
-            <version>${nd4j.version}</version>
-<!--            <classifier>linux-x86_64-avx2</classifier>-->
+            <version>${deeplearning4j.version}</version>
+            <!--            <classifier>linux-x86_64-avx2</classifier>-->
             <classifier>macosx-x86_64-avx2</classifier>
-<!--            <classifier>windows-x86_64-avx2</classifier>-->
+            <!--            <classifier>windows-x86_64-avx2</classifier>-->
         </dependency>
 
-        <dependency>
-            <groupId>edu.stanford.nlp</groupId>
-            <artifactId>stanford-corenlp</artifactId>
-            <version>${corenlp.version}</version>
-        </dependency>
-        <dependency>
-            <!-- 346MB -->
-            <groupId>edu.stanford.nlp</groupId>
-            <artifactId>stanford-corenlp</artifactId>
-            <version>${corenlp.version}</version>
-            <classifier>models</classifier>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.lucene.morphology</groupId>
-            <artifactId>english</artifactId>
-            <version>1.5</version>
-        </dependency>
         <dependency>
             <groupId>org.apache.lucene</groupId>
             <artifactId>lucene-core</artifactId>
-            <version>8.4.1</version>
+            <version>${lucene.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.lucene</groupId>
             <artifactId>lucene-analyzers-common</artifactId>
-            <version>8.4.1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.opennlp</groupId>
-            <artifactId>opennlp-tools</artifactId>
-            <version>1.9.2</version>
+            <version>${lucene.version}</version>
         </dependency>
 
         <dependency>
@@ -122,7 +93,6 @@
             <artifactId>tensorflow</artifactId>
             <version>1.15.0</version>
         </dependency>
-
 
         <!-- TEST DEPENDENCIES -->
         <dependency>

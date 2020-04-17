@@ -4,20 +4,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
-public class ModelFile {
-
-    private List<String> classes;
+public class PreprocessingBlackboxData {
 
     @JsonProperty("test_sentences")
     private List<Sentence> testSentences;
-
-    public List<String> getClasses() {
-        return classes;
-    }
-
-    public void setClasses(final List<String> classes) {
-        this.classes = classes;
-    }
 
     public List<Sentence> getTestSentences() {
         return testSentences;
@@ -31,10 +21,9 @@ public class ModelFile {
 
         private List<String> cleaned;
 
-        // TODO double?
-        private List<Double> padded;
-        private List<List<Double>> predicted;
-        private List<Double> preprocessed;
+        private List<Float> padded;
+        private List<List<Float>> predicted;
+        private List<Float> preprocessed;
         private String sentence;
         private List<Integer> tokenized;
 
@@ -46,27 +35,27 @@ public class ModelFile {
             this.cleaned = cleaned;
         }
 
-        public List<Double> getPadded() {
+        public List<Float> getPadded() {
             return padded;
         }
 
-        public void setPadded(final List<Double> padded) {
+        public void setPadded(final List<Float> padded) {
             this.padded = padded;
         }
 
-        public List<List<Double>> getPredicted() {
+        public List<List<Float>> getPredicted() {
             return predicted;
         }
 
-        public void setPredicted(final List<List<Double>> predicted) {
+        public void setPredicted(final List<List<Float>> predicted) {
             this.predicted = predicted;
         }
 
-        public List<Double> getPreprocessed() {
+        public List<Float> getPreprocessed() {
             return preprocessed;
         }
 
-        public void setPreprocessed(final List<Double> preprocessed) {
+        public void setPreprocessed(final List<Float> preprocessed) {
             this.preprocessed = preprocessed;
         }
 

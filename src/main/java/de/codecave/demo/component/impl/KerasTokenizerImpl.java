@@ -7,22 +7,23 @@ import org.deeplearning4j.nn.modelimport.keras.exceptions.InvalidKerasConfigurat
 import org.deeplearning4j.nn.modelimport.keras.preprocessing.text.KerasTokenizer;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
-import java.lang.reflect.Array;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 
 @Service
-public class KerasServiceImpl implements TokenizerService {
+public class KerasTokenizerImpl implements TokenizerService {
 
-    public static final int MAX_FEATURES = 2000;
+    private static final int MAX_FEATURES = 2000;
 
-    private final KerasTokenizer kerasTokenizer;
+    private KerasTokenizer kerasTokenizer;
 
-    public KerasServiceImpl() {
+    @PostConstruct
+    public void init() {
         kerasTokenizer = loadAndConfigure();
     }
 
@@ -30,7 +31,7 @@ public class KerasServiceImpl implements TokenizerService {
         try {
             final Path tmpFile = Files.createTempFile("keras_tokenizer_config", ".json");
 
-            final InputStream is = KerasServiceImpl.class.getResourceAsStream("/nlp/tokenizer.json");
+            final InputStream is = KerasTokenizerImpl.class.getResourceAsStream("/nlp/tokenizer.json");
             Preconditions.checkNotNull(is, "Keras config not found in classpath");
             Files.copy(is, tmpFile, StandardCopyOption.REPLACE_EXISTING);
             final KerasTokenizer kerasTokenizer = KerasTokenizer.fromJson(tmpFile.toString());
@@ -52,16 +53,16 @@ public class KerasServiceImpl implements TokenizerService {
      * MAX_FEATURES = 2000
      * tokenizer = Tokenizer(num_words=MAX_FEATURES, split=' ')
      * eq. in Java ist der KerasTokenizer
-     *
-     static KerasTokenizer	fromJson(java.lang.String jsonFileName)
-     Import Keras Tokenizer from JSON file created with `tokenizer.to_json()` in Python.
-
-     return tokenizer.texts_to_sequences(text)
+     * <p>
+     * static KerasTokenizer	fromJson(java.lang.String jsonFileName)
+     * Import Keras Tokenizer from JSON file created with `tokenizer.to_json()` in Python.
+     * <p>
+     * return tokenizer.texts_to_sequences(text)
      */
 
     // Die tokenizer.json liegt unter resources/nlp/tokenizer.json
     @Override
-    public int [] textToSequence(String text) {
+    public int[] textToSequence(String text) {
         final Integer[][] sequences = kerasTokenizer.textsToSequences(new String[]{text});
         Preconditions.checkState(sequences.length == 1, "Expecting batch of one");
         return ArrayUtils.toPrimitive(sequences[0]);
