@@ -22,7 +22,7 @@ public class PreprocessingBlackboxData {
         private List<String> cleaned;
 
         private List<Float> padded;
-        private List<List<Float>> predicted;
+        private List<Float> predicted;
         private List<Float> preprocessed;
         private String sentence;
         private List<Integer> tokenized;
@@ -43,11 +43,11 @@ public class PreprocessingBlackboxData {
             this.padded = padded;
         }
 
-        public List<List<Float>> getPredicted() {
+        public List<Float> getPredicted() {
             return predicted;
         }
 
-        public void setPredicted(final List<List<Float>> predicted) {
+        public void setPredicted(final List<Float> predicted) {
             this.predicted = predicted;
         }
 
