@@ -40,17 +40,17 @@ public class PreprocessingBlackboxTest {
     @Autowired
     private TextCleanerService textCleanerService;
 
-    @Value("classpath:/nlp/preprocessing_test.json")
+    @Value("classpath:/nlp/blackbox_test.json")
     private Resource blackboxTestFile;
 
     @Test
-    void testTokenizer() {
+    void testTextPreprocessing() {
         int success = 0;
         int error = 0;
 
-        final PreprocessingBlackboxData modelFile = loadModelFile();
+        final BlackboxTestData modelFile = loadModelFile();
 
-        for (PreprocessingBlackboxData.Sentence sentence : modelFile.getTestSentences()) {
+        for (BlackboxTestData.Sentence sentence : modelFile.getTestSentences()) {
 
             System.out.println("input\t" + sentence.getSentence());
             System.out.println("tok\t" + sentence.getTokenized());
@@ -74,11 +74,11 @@ public class PreprocessingBlackboxTest {
         assertThat(error, is(0));
     }
 
-    private PreprocessingBlackboxData loadModelFile() {
+    private BlackboxTestData loadModelFile() {
 
         try {
 
-            return objectMapper.readValue(blackboxTestFile.getInputStream(), PreprocessingBlackboxData.class);
+            return objectMapper.readValue(blackboxTestFile.getInputStream(), BlackboxTestData.class);
 
         } catch (IOException e) {
             throw new IllegalStateException(e);

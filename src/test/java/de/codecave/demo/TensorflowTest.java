@@ -47,7 +47,7 @@ public class TensorflowTest {
 //            final Tensor<Float> auxTensor = Tensor.create(new long[]{batchSize, maxFeaturesAmount}, matrix(batchSize, maxFeaturesAmount));
 
             final Tensor<?> resultTensor =
-                    runner.feed("serving_default_tobias", padTensor)
+                    runner.feed("serving_default_input_1", padTensor)
 //                    .feed("x_aux", auxTensor)
                             .fetch("StatefulPartitionedCall")
                             .run()
@@ -107,7 +107,7 @@ public class TensorflowTest {
 
                 // runner is a factory method
                 session.runner()
-                        .feed("serving_default_tobias", padTensor)
+                        .feed("serving_default_input_1", padTensor)
 //                    .feed("x_aux", auxTensor)
                         .fetch("StatefulPartitionedCall")
                         .run()

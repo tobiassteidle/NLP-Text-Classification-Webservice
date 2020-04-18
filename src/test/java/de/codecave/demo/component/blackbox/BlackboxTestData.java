@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
-public class PreprocessingBlackboxData {
+public class BlackboxTestData {
 
     @JsonProperty("test_sentences")
     private List<Sentence> testSentences;

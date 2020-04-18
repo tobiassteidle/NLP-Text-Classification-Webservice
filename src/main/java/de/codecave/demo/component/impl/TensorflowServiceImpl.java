@@ -63,7 +63,7 @@ public class TensorflowServiceImpl implements TensorflowService {
 
         final Tensor<?> resultTensor =
                 modelBundle.session().runner()
-                        .feed("serving_default_tobias", inputTensor)
+                        .feed("serving_default_input_1", inputTensor)
                         .fetch("StatefulPartitionedCall")
                         .run()
                         .get(0);
