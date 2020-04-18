@@ -73,13 +73,13 @@ public class TensorflowServiceImpl implements TensorflowService {
         Preconditions.checkState(resultArray.length == 1);
         final float[] result = resultArray[0];
 
-        LOGGER.info("Tensorflow prediction completed in {}ms ...\n" +
+        LOGGER.info("Tensorflow prediction completed in {}us ...\n" +
                         "Tensorflow details:" +
                         "- input shape {}\n" +
                         "- input vector {}\n" +
                         "- output shape {}\n" +
                         "- output vector {}",
-                stopWatch.getTime(TimeUnit.MILLISECONDS),
+                stopWatch.getTime(TimeUnit.MICROSECONDS),
                 inputTensor,
                 Arrays.toString(inputTokens),
                 resultTensor,
