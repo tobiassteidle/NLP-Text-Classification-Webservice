@@ -1,37 +1,26 @@
 package de.codecave.demo.component.blackbox;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.primitives.Ints;
 import de.codecave.demo.component.ModelMetadata;
 import de.codecave.demo.component.NewsCategoriesService;
-import de.codecave.demo.component.TensorflowService;
-import de.codecave.demo.component.impl.*;
-import de.codecave.demo.spring.Configuration;
 import one.util.streamex.EntryStream;
-import one.util.streamex.StreamEx;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Import;
 import org.springframework.core.io.Resource;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 @SpringBootTest(properties = {"tensorflow.model_dir=../model/tensorflow3/tensorflow"})
 public class PredictionBlackboxTest {
+
+    private static final float DELTA_FLOAT = 0.000001f;
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
@@ -72,7 +61,7 @@ public class PredictionBlackboxTest {
                 EntryStream.zip(modelMetadata.getClasses(), sentence.getPredicted())
                     .toImmutableMap();
 
-            if (actual.equals(expected)) {
+            if (equalsFloatMap(actual, expected, DELTA_FLOAT)) {
                 System.out.println("-> OK");
                 success++;
             } else {
@@ -97,6 +86,32 @@ public class PredictionBlackboxTest {
             throw new IllegalStateException(e);
         }
 
+    }
+
+    /**
+     * 0.9086461663246155 vs. 0.9086461067199707
+     */
+    private static boolean equalsFloatMap(
+            final Map<String, Float> first, final Map<String, Float> second, final float delta) {
+
+        if (first.size() != second.size()) {
+            return false;
+        }
+
+        return first.entrySet().stream()
+                .allMatch(e -> floatIsEqual(e.getValue(), second.get(e.getKey()), delta));
+
+    }
+
+    static private boolean floatIsEqual(float f1, float f2, float delta) {
+        if (Float.compare(f1, f2) == 0) {
+            return true;
+        }
+        if ((Math.abs(f1 - f2) <= delta)) {
+            return true;
+        }
+
+        return false;
     }
 
 }
