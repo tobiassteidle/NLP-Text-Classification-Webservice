@@ -43,21 +43,8 @@ public class TextPreprocessorTest {
     }
 
     @Test
-    public void tokenizeTest() {
-        assertThat(tokenizerService.textToSequence(textCleanerService.cleanText(TEST_SENTENCE_1)), is(new int[]{248, 58, 47}));
-        assertThat(tokenizerService.textToSequence(textCleanerService.cleanText(TEST_SENTENCE_2)), is(new int[]{2, 613}));
-        assertThat(tokenizerService.textToSequence(textCleanerService.cleanText(TEST_SENTENCE_3)), is(new int[]{324, 1129}));
-    }
-
-    @Test
     public void paddingTest() {
         assertThat(paddingService.padding(new int[]{11, 22, 33}), is(new int[]{11, 22, 33, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}));
     }
 
-    @Test
-    public void preprocessingPipelineTest() {
-        assertThat(textPreprocessor.pipeline(TEST_SENTENCE_1), is(new int[]{248, 58, 47, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}));
-        assertThat(textPreprocessor.pipeline(TEST_SENTENCE_2), is(new int[]{2, 613, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}));
-        assertThat(textPreprocessor.pipeline(TEST_SENTENCE_3), is(new int[]{324, 1129, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}));
-    }
 }

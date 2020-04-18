@@ -30,6 +30,8 @@ public class NewsCategoriesServiceImpl implements NewsCategoriesService {
     @Override
     public Map<String, Float> predictCategories(final String newsLine) {
 
+        LOGGER.info("Run News Classification for: {}", newsLine);
+
         final int[] inputTokens = textPreprocessor.pipeline(newsLine);
 
         final float[] result = tensorflowService.predictSingleTensorflow(inputTokens);

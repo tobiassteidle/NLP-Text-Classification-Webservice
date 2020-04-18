@@ -23,7 +23,7 @@ public class KerasTokenizerTest {
 
         final int[] sequence = kerasService.textToSequence("tom hardi complet unrecogniz al capon new movi");
 
-        assertThat(sequence, is(new int[]{285, 600, 959, 4, 159}));
+        assertThat(sequence, is(new int[]{454, 1073, 1376, 4, 139}));
 
     }
 
