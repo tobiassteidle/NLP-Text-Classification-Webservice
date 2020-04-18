@@ -74,7 +74,7 @@ public class TensorflowServiceImpl implements TensorflowService {
         final float[] result = resultArray[0];
 
         LOGGER.info("Tensorflow prediction completed in {}us ...\n" +
-                        "Tensorflow details:" +
+                        "Tensorflow details:\n" +
                         "- input shape {}\n" +
                         "- input vector {}\n" +
                         "- output shape {}\n" +

@@ -1,8 +1,12 @@
 package de.codecave.demo.rest;
 
+import com.google.common.primitives.Floats;
 import de.codecave.demo.component.NewsCategoriesService;
 import de.codecave.demo.rest.dto.PredictionRequest;
 import de.codecave.demo.rest.dto.PredictionResponse;
+import one.util.streamex.EntryStream;
+import org.nd4j.linalg.api.ndarray.INDArray;
+import org.nd4j.linalg.factory.Nd4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,9 +32,15 @@ public class NewsCategoriesController {
 
         final Map<String, Float> predictions = predictionService.predictCategories(newsLine);
 
+        final String bestClass = EntryStream.of(predictions)
+                .maxByDouble(entry -> entry.getValue())
+                .orElseThrow(() -> new IllegalStateException())
+                .getKey();
+
         final PredictionResponse response = new PredictionResponse();
         response.setNewsLine(newsLine);
         response.setPredictions(predictions);
+        response.setBestClass(bestClass);
 
         return ResponseEntity.ok(response);
     }
