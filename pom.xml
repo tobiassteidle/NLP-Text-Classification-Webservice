@@ -18,6 +18,7 @@
         <java.version>1.8</java.version>
         <deeplearning4j.version>1.0.0-beta6</deeplearning4j.version>
         <lucene.version>8.5.1</lucene.version>
+        <tensorflow.version>1.15.0</tensorflow.version>
     </properties>
 
     <dependencies>
@@ -91,8 +92,13 @@
         <dependency>
             <groupId>org.tensorflow</groupId>
             <artifactId>tensorflow</artifactId>
-            <version>1.15.0</version>
+            <version>${tensorflow.version}</version>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.tensorflow</groupId>-->
+<!--            <artifactId>libtensorflow_jni_gpu</artifactId>-->
+<!--            <version>${tensorflow.version}</version>-->
+<!--        </dependency>-->
 
         <!-- TEST DEPENDENCIES -->
         <dependency>
