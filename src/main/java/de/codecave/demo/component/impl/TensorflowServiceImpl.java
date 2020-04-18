@@ -36,7 +36,7 @@ public class TensorflowServiceImpl implements TensorflowService {
     public void loadAndConfigure() {
         LOGGER.info("Loading Tensorflow model from directory {}", tensorflowModelDir);
         final Path modelDir = Paths.get(tensorflowModelDir);
-        Preconditions.checkState(Files.isDirectory(modelDir));
+        Preconditions.checkState(Files.isDirectory(modelDir), "Tensorflow model missing - see README");
         modelBundle = SavedModelBundle.load(modelDir.toAbsolutePath().toString(), "serve");
     }
 

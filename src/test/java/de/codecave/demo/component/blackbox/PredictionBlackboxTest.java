@@ -17,7 +17,7 @@ import java.util.Map;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-@SpringBootTest(properties = {"tensorflow.model_dir=../model/tensorflow3/tensorflow"})
+@SpringBootTest
 public class PredictionBlackboxTest {
 
     private static final float DELTA_FLOAT = 0.000001f;

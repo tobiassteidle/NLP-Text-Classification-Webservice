@@ -22,7 +22,7 @@ public class TensorflowTest {
     void singleRun() {
 
         final SavedModelBundle modelBundle = SavedModelBundle.load(
-                "../model/tensorflow3/tensorflow", "serve");
+                "models-tensorflow-work/tensorflow", "serve");
 
         final List<String> categories = modelMetadata().getClasses();
 
