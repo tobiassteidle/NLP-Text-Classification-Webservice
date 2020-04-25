@@ -47,8 +47,7 @@ public class TextCleanerServiceImpl implements TextCleanerService {
     }
 
     private static String removePunctuation(String text) {
-        final String punctuations = Pattern.quote("!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}‘’");
-        return text.replaceAll("[" + punctuations + "]", "");
+        return StringUtils.replaceChars(text, "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}‘’", "");
     }
 
     private Set<String> loadStopWordsFromTxtFile() {

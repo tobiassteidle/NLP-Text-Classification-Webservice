@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
@@ -45,33 +45,36 @@ public class PreprocessingBlackboxTest {
 
     @Test
     void testTextPreprocessing() {
-        int success = 0;
-        int error = 0;
+        int successCount = 0;
+        int errorCount = 0;
 
         final BlackboxTestData testData = loadModelFile();
 
         for (BlackboxTestData.Sentence sentence : testData.getTestSentences()) {
 
-            System.out.println("input\t" + sentence.getSentence());
-            System.out.println("tok\t" + sentence.getTokenized());
+            System.out.println("given\t\t" + sentence.getSentence());
+            System.out.println("expected\t" + sentence.getTokenized());
 
             final String cleaned = textCleanerService.cleanText(sentence.getSentence());
-            System.out.println("clean\t" + cleaned);
+            System.out.println("expected\t" + cleaned);
 
             final List<Integer> actual = Ints.asList(textPreprocessor.pipeline(sentence.getSentence()));
             final List<Integer> expected = sentence.getPadded().stream().map(Float::intValue).collect(Collectors.toList());
             if (actual.equals(expected)) {
                 System.out.println("-> OK");
-                success++;
+                successCount++;
             } else {
-                System.out.println("-> ERR - got " + actual);
-                error++;
+                System.out.println("-> MISMATCH");
+                System.out.println("got\t\t" + textCleanerService.cleanText(sentence.getSentence()));
+                System.out.println("got\t\t" + actual);
+                errorCount++;
             }
 
             System.out.println();
         }
 
-        assertThat(error, is(0));
+        System.out.println(String.format("%d successes and %d errors", successCount, errorCount));
+        assertThat(errorCount, is(0));
     }
 
     private BlackboxTestData loadModelFile() {

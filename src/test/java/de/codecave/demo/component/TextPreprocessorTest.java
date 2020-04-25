@@ -24,7 +24,7 @@ public class TextPreprocessorTest {
     private static final String TEST_SENTENCE_3 = "Best Travel Apps And Hacks For Your Vacation Workout";
 
     @Autowired
-    private TextPreprocessor textPreprocessor;
+    private TextCleanerService textCleanerService;
 
     @Autowired
     private TokenizerService tokenizerService;
@@ -32,14 +32,16 @@ public class TextPreprocessorTest {
     @Autowired
     private PaddingService paddingService;
 
-    @Autowired
-    private TextCleanerService textCleanerService;
-
     @Test
     public void cleanTextTest() {
         assertThat(textCleanerService.cleanText(TEST_SENTENCE_1), is("ferrel molli shannon cover royal wed cord tish"));
         assertThat(textCleanerService.cleanText(TEST_SENTENCE_2), is("<num> fashion mistak youll regret forev"));
         assertThat(textCleanerService.cleanText(TEST_SENTENCE_3), is("best travel app hack vacat workout"));
+    }
+
+    @Test
+    void tokenizeTest() {
+        assertThat(tokenizerService.textToSequence("ferrel molli shannon cover royal wed cord tish"), is(new int[]{269, 835, 567}));
     }
 
     @Test
