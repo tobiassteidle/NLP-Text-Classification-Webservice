@@ -73,6 +73,7 @@ public class PredictionBlackboxTest {
             System.out.println();
         }
 
+        System.out.println("Successes: " + success);
         assertThat(error, is(0));
     }
 

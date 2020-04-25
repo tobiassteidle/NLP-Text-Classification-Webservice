@@ -34,7 +34,8 @@ public class NewsCategoriesServiceImpl implements NewsCategoriesService {
 
         final int[] inputTokens = textPreprocessor.pipeline(newsLine);
 
-        final float[] result = tensorflowService.predictSingleTensorflow(inputTokens);
+        final float[] result = tensorflowService.predictSingleTensorflow(
+                inputTokens, modelMetadata.getClasses().size());
 
         return
                 EntryStream.zip(modelMetadata.getClasses(), Floats.asList(result))

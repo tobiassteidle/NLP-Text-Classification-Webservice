@@ -39,7 +39,7 @@ public class TextCleanerServiceImpl implements TextCleanerService {
                 REGEX_WHITESPACE.splitAsStream(text)
                         .map(tok -> tok.toLowerCase(Locale.ENGLISH))
                         .map(tok -> stemmerService.tryStemming(tok).orElse(tok))
-                        .map(String::trim) // python3 string.strip The strip() method removes any whitespace from the beginning or the end:
+                        .map(String::trim)
                         .map(tok -> removePunctuation(tok))
                         .map(tok -> Python3CompatUtil.isnumeric(tok) ? "<num>" : tok)
                         .filter(tok -> !stopWords.contains(tok))
@@ -47,7 +47,10 @@ public class TextCleanerServiceImpl implements TextCleanerService {
     }
 
     private static String removePunctuation(String text) {
-        return StringUtils.replaceChars(text, "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}‘’", "");
+        return StringUtils.replaceChars(
+                text,
+                "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}‘’",
+                "");
     }
 
     private Set<String> loadStopWordsFromTxtFile() {

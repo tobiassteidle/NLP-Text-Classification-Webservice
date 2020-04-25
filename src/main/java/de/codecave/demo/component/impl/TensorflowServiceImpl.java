@@ -47,12 +47,18 @@ public class TensorflowServiceImpl implements TensorflowService {
         modelBundle = null;
     }
 
+    /**
+     * - input shape INT32 tensor with shape [1, 20]
+     * - input vector [225, 1113, 186, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+     * - output shape FLOAT tensor with shape [1, 10]
+     * - output vector [0.02423917, 0.07196671, 8.999937E-4, 0.011337514, 0.0049416884,
+     *                  0.84558976, 0.026367448, 6.4031663E-4, 0.0064433725, 0.0075740833]
+     */
     @Override
-    public float[] predictSingleTensorflow(final int[] inputTokens) {
+    public float[] predictSingleTensorflow(final int[] inputTokens, final int nCategories) {
         final StopWatch stopWatch = StopWatch.createStarted();
 
         final int nFeatures = 20;
-        final int nCategories = 10;
 
         Preconditions.checkState(inputTokens.length == nFeatures);
 
@@ -63,9 +69,9 @@ public class TensorflowServiceImpl implements TensorflowService {
         final Tensor<?> resultTensor =
                 modelBundle.session().runner()
                         .feed("serving_default_input_1", inputTensor)
-                        .fetch("StatefulPartitionedCall")
+                        .fetch("StatefulPartitionedCall") // output layer
                         .run()
-                        .get(0);
+                        .get(0); // first output
 
         final float[][] resultArray = resultTensor.copyTo(new float[BATCH_SIZE_ONE][nCategories]);
 
