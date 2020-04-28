@@ -90,7 +90,7 @@ public class PredictionBlackboxTest {
     }
 
     /**
-     * 0.9086461663246155 vs. 0.9086461067199707
+     * 0.97438747 vs. 0.97438735
      */
     private static boolean equalsFloatMap(
             final Map<String, Float> first, final Map<String, Float> second, final float delta) {
