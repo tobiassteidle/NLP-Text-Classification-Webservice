@@ -33,10 +33,8 @@ public class TextCleanerServiceImpl implements TextCleanerService {
 
     @Override
     public String cleanText(String text) {
-        final Pattern REGEX_WHITESPACE = Pattern.compile("\\s");
-
         return
-                REGEX_WHITESPACE.splitAsStream(text)
+                Python3CompatUtil.split(text)
                         .map(tok -> tok.toLowerCase(Locale.ENGLISH))
                         .map(tok -> stemmerService.tryStemming(tok).orElse(tok))
                         .map(String::trim)

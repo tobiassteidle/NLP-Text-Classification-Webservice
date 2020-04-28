@@ -4,7 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.primitives.Ints;
 import de.codecave.demo.component.TextCleanerService;
 import de.codecave.demo.component.TextPreprocessor;
-import de.codecave.demo.component.impl.*;
+import de.codecave.demo.component.impl.KerasTokenizerImpl;
+import de.codecave.demo.component.impl.SimplePaddingServiceImpl;
+import de.codecave.demo.component.impl.StemmerServiceImpl;
+import de.codecave.demo.component.impl.TextCleanerServiceImpl;
+import de.codecave.demo.component.impl.TextPreprocessorImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +21,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 /**

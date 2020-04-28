@@ -3,7 +3,6 @@ package de.codecave.demo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.codecave.demo.component.ModelMetadata;
 import org.junit.jupiter.api.Test;
-import org.nd4j.linalg.factory.Nd4j;
 import org.tensorflow.SavedModelBundle;
 import org.tensorflow.Session;
 import org.tensorflow.Tensor;

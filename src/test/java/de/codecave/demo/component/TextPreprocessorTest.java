@@ -1,6 +1,10 @@
 package de.codecave.demo.component;
 
-import de.codecave.demo.component.impl.*;
+import de.codecave.demo.component.impl.KerasTokenizerImpl;
+import de.codecave.demo.component.impl.SimplePaddingServiceImpl;
+import de.codecave.demo.component.impl.StemmerServiceImpl;
+import de.codecave.demo.component.impl.TextCleanerServiceImpl;
+import de.codecave.demo.component.impl.TextPreprocessorImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;

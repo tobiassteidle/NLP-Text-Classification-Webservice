@@ -1,6 +1,6 @@
 package de.codecave.demo.component;
 
-import de.codecave.demo.component.impl.*;
+import de.codecave.demo.component.impl.KerasTokenizerImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
