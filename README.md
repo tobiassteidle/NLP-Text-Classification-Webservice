@@ -35,3 +35,7 @@ curl -XPOST -H 'Content-Type: application/json' \
  -d '{"newsLine":"Read about Hollywood new born stars"}' \
   http://localhost:8080/nlpclass/news-category/prediction
 ```
+
+## Run Elm Client (simple web interface)
+You can use a simple web interface to perform predictions.
+More details on this can be found [here](https://github.com/cc-cpo/NLP-Text-Classification-Webservice-Elm-Client).
